@@ -1,0 +1,50 @@
+php-fpm:
+    build: php-fpm
+    ports:
+        - 9000:9000
+    volumes:
+        - './tests:/project/tests'
+    links:
+        - db
+nginx:
+    build: nginx
+    ports:
+        - 8080:80
+    volumes:
+        - './tests:/project/tests'        
+    links:
+        - php-fpm
+db:
+    image: mysql
+    ports:
+        - 3306:3306
+    environment:
+        MYSQL_DATABASE: mydb
+        MYSQL_USER: jen
+        MYSQL_PASSWORD: root
+        MYSQL_ROOT_PASSWORD: root
+codecept:
+      image: codeception/codeception
+      environment:
+        - TEST_MOGWAI_USER=${TEST_MOGWAI_USER}
+        - TEST_MOGWAI_PASS=${TEST_MOGWAI_PASS}
+        - TEST_MOGWAI_LIMIT=${TEST_MOGWAI_LIMIT}
+      volumes:
+          - './tests:/project/tests'
+          - './codeception.yml:/project/codeception.yml'
+chrome:
+      image: 'selenium/standalone-chrome-debug:2.53.1'
+      ports:
+          - '5900'
+      # workaround for Docker for Mac, see https://github.com/SeleniumHQ/docker-selenium/issues/227#issuecomment-224865735
+      dns: 8.8.4.4
+      environment:
+        - no_proxy=localhost
+firefox:
+      image: 'selenium/standalone-firefox-debug:2.53.1'
+      ports:
+          - '5900'
+      # workaround for Docker for Mac, see https://github.com/SeleniumHQ/docker-selenium/issues/227#issuecomment-224865735
+      dns: 8.8.4.4
+      environment:
+        - no_proxy=localhost
