@@ -1,6 +1,6 @@
 <?php
-$user = 'jen';
-$pass = 'root';
+$user = 'dev';
+$pass = '123123';
 
 try {
     $dbh = new PDO('mysql:host=db;dbname=mydb', $user, $pass);
