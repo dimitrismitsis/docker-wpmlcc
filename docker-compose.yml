@@ -32,6 +32,9 @@ codecept:
     volumes:
       - './tests:/project/tests'
       - './codeception.yml:/project/codeception.yml'
+    links:
+        - chrome
+        - firefox
 chrome:
     image: 'selenium/standalone-chrome-debug:2.53.1'
     ports:
@@ -39,6 +42,9 @@ chrome:
     dns: 8.8.4.4
     environment:
       - no_proxy=localhost
+    links:
+        - codecept
+        - firefox
 firefox:
     image: 'selenium/standalone-firefox-debug:2.53.1'
     ports:
@@ -46,3 +52,6 @@ firefox:
     dns: 8.8.4.4
     environment:
       - no_proxy=localhost
+    links:
+        - codecept
+        - chrome
